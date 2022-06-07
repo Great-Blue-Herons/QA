@@ -2,6 +2,7 @@
 
 QA is a question and answers service that suports the following queries:
 
+- All questions/answers for a given product id
 - All questions/answers made by a user
 - All answers for a question
 - Keyword search

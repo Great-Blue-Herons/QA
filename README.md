@@ -38,3 +38,8 @@ From the root directory, run the following installation and setup commands in yo
   ```
   npm run server-dev
   ```
+3. Start PostgreSQL Terminal
+  ```
+  brew services start postgresql
+  psql postgres
+  ```

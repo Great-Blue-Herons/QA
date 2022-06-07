@@ -16,7 +16,8 @@ QA is a question and answers service that suports the following queries:
 
 ### Pre Instillation Requirments
 ```
-
+node v16.15.0
+npm v8.5.5
 ```
 ## Environment Variables
 

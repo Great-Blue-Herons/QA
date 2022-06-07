@@ -1,7 +1,7 @@
 {
   "name": "qa",
   "version": "1.0.0",
-  "description": "QA is a question and answers service that suports the following queries:",
+  "description": "QA is a question and answers service that suports both a parallel server and a relational database",
   "main": "index.js",
   "scripts": {
     "test": "jest"
@@ -19,5 +19,8 @@
   "devDependencies": {
     "eslint": "^8.17.0",
     "jest": "^28.1.1"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
   }
 }

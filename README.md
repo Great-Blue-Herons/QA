@@ -1,6 +1,8 @@
 # QA
 
-QA is a question and answers service that suports the following queries:
+QA is a question and answers service that supports both a parallel server and a relational database
+
+QA suports the following queries:
 
 - All questions/answers for a given product id
 - All questions/answers made by a user
@@ -25,7 +27,7 @@ QA uses [dotenv](https://www.npmjs.com/package/dotenv)
 
 Update the Port and Auth variables in the `example.env`file found in the main directory. Make sure the AUTH variable is updated with your GITHUB token. When variables are updated remove example from the name and save the file as `.env`
 
-## Installation and Setup 
+## Installation and Setup
 
 From the root directory, run the following installation and setup commands in your terminal
 1. Install dependencies"

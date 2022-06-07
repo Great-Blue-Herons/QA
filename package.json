@@ -1,0 +1,23 @@
+{
+  "name": "qa",
+  "version": "1.0.0",
+  "description": "QA is a question and answers service that suports the following queries:",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Great-Blue-Herons/QA.git"
+  },
+  "author": "Sonia Ann Friscia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Great-Blue-Herons/QA/issues"
+  },
+  "homepage": "https://github.com/Great-Blue-Herons/QA#readme",
+  "devDependencies": {
+    "eslint": "^8.17.0",
+    "jest": "^28.1.1"
+  }
+}

@@ -99,3 +99,4 @@ CREATE INDEX IF NOT EXISTS fki_answer_id_fk
     ON public.answers_photos USING btree
     (answer_id ASC NULLS LAST)
     TABLESPACE pg_default;
+

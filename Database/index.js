@@ -121,15 +121,14 @@ const getAllAs = function (question_id, page, count) {
 const postQ = function (body, name, email, product_id) {
   return pool.connect()
     .then((client) => {
-      return client.query(`
-      `, [product_id])
-        .then((data) => {
+      return client.query(`INSERT INTO questions (body, asker_name, asker_email, product_id) VALUES ($1::text, $2::varchar, $3::varchar, $4::bigint)
+      `, [body, name, email, product_id])
+        .then(() => {
           client.release();
-          return data.rows[0].results;
         })
         .catch((err) => {
           client.release();
-          console.log('error getting all questions', err);
+          console.log('error posting question', err);
         });
     })
     .catch((err) => {

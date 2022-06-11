@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllQs, getAllAs } = require('../Database/index.js');
+const { getAllQs, getAllAs, postQ } = require('../Database/index.js');
 const app = express();
 
 // middleware
@@ -35,6 +35,22 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
       console.log('error fetching answers', err);
       res.statusCode(500);
     });
+})
+
+app.post('/qa/questions', (req, res) => {
+  let body = req.body.body;
+  let name = req.body.name;
+  let email = req.body.email;
+  let product_id = req.body.product_id;
+
+  postQ(body, name, email, product_id)
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('error posting question to db', err);
+      res.sendStatus(500);
+    })
 })
 
 

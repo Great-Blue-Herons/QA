@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllQs } = require('../Database/index.js');
+const { getAllQs, getAllAs } = require('../Database/index.js');
 const app = express();
 
 // middleware
@@ -21,6 +21,21 @@ app.get('/qa/questions', (req, res) => {
       res.statusCode(500);
     });
 });
+
+app.get('/qa/questions/:question_id/answers', (req, res) => {
+  let question_id = req.params.question_id;
+  let page = req.params.page || 1;
+  let count = req.params.count || 5;
+
+  getAllAs(question_id, page, count)
+    .then((answers) => {
+      res.json(answers);
+    })
+    .catch(err => {
+      console.log('error fetching answers', err);
+      res.statusCode(500);
+    });
+})
 
 
 

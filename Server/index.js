@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllQs, getAllAs, postQ } = require('../Database/index.js');
+const { getAllQs, getAllAs, postQ, postA } = require('../Database/index.js');
 const app = express();
 
 // middleware
@@ -37,7 +37,7 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
       console.log('error fetching answers', err);
       res.statusCode(500);
     });
-})
+});
 
 app.post('/qa/questions', (req, res) => {
   let body = req.body.body;
@@ -53,9 +53,24 @@ app.post('/qa/questions', (req, res) => {
       console.log('error posting question to db', err);
       res.sendStatus(500);
     })
-})
+});
 
+app.post('/qa/questions/:question_id/answers', (req, res) => {
+  let body = req.body.body;
+  let name = req.body.name;
+  let email = req.body.email;
+  let photos = req.body.photos;
+  let question_id = req.params.question_id;
 
+  postA(body, name, email, question_id, photos)
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('error posting answer to db', err);
+      res.sendStatus(500);
+    })
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);

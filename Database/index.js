@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const { getAllQuestions, getAllAnswers } = require('./queries.js');
+const { getAllQuestions, getAllAnswers, postQuestion, postAnswer } = require('./queries.js');
 
 const pool = new Pool({
   user: process.env.USER,
@@ -49,8 +49,7 @@ const getAllAs = function (question_id, page, count, offset) {
 const postQ = function (body, name, email, product_id) {
   return pool.connect()
     .then((client) => {
-      return client.query(`INSERT INTO questions (body, asker_name, asker_email, product_id) VALUES ($1::text, $2::varchar, $3::varchar, $4::bigint)
-      `, [body, name, email, product_id])
+      return client.query(postQuestion, [body, name, email, product_id])
         .then(() => {
           client.release();
         })
@@ -64,18 +63,16 @@ const postQ = function (body, name, email, product_id) {
     });
 }
 
-const postA = function (question_id, body, name, email, photos) {
+const postA = function (body, name, email, question_id, photos) {
   return pool.connect()
   .then((client) => {
-    return client.query(`
-    `, [product_id])
+    return client.query(postAnswer, [body, name, email, question_id, photos])
       .then((data) => {
         client.release();
-        return data.rows[0].results;
       })
       .catch((err) => {
         client.release();
-        console.log('error getting all questions', err);
+        console.log('error posting answer', err);
       });
   })
   .catch((err) => {

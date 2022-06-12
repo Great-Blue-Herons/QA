@@ -55,8 +55,20 @@ const getAllQs = function (product_id, page, count) {
               )
           )
       ) results
-      FROM questions q
-      WHERE q.product_id = $1::bigint AND q.reported = 0;`, [product_id, page, count])
+      FROM
+      (
+        SELECT
+        qu.id,
+        qu.body,
+        qu.date_written,
+        qu.asker_name,
+        qu.reported,
+        qu.helpful
+        FROM questions qu
+        WHERE qu.product_id = $1::bigint AND qu.reported = 0
+        OFFSET $4::bigint
+        LIMIT $3::bigint
+    ) q;`, [product_id, page, count, (page -1) * count])
         .then((data) => {
           client.release();
           return data.rows[0].results;

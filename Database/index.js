@@ -16,11 +16,13 @@ const getAllQs = function (product_id, page, count) {
       SELECT
       json_build_object (
           'product_id', $1::bigint,
+          'page', $2::bigint,
+          'count', $3::bigint,
           'results', json_agg(
               json_build_object(
                   'question_id', q.id,
                   'question_body', q.body,
-                  'date_written', q.date_written,
+                  'date_written', to_timestamp(q.date_written),
                   'asker_name', q.asker_name,
                   'question_helpfulness', q.helpful,
                   'reported', q.reported,
@@ -30,7 +32,7 @@ const getAllQs = function (product_id, page, count) {
                           json_build_object(
                               'id', an.id,
                               'body', an.body,
-                              'date', an.date_written,
+                              'date', to_timestamp(an.date_written),
                               'answerer_name', an.answerer_name,
                               'helpfulness', an.helpful,
                               'photos', ( SELECT
@@ -54,7 +56,7 @@ const getAllQs = function (product_id, page, count) {
           )
       ) results
       FROM questions q
-      WHERE q.product_id = $1::bigint AND q.reported = 0;`, [product_id])
+      WHERE q.product_id = $1::bigint AND q.reported = 0;`, [product_id, page, count])
         .then((data) => {
           client.release();
           return data.rows[0].results;
@@ -76,13 +78,15 @@ const getAllAs = function (question_id, page, count) {
       SELECT
       json_build_object (
           'question_id', $1::bigint,
+          'page', $2::bigint,
+          'count', $3::bigint,
           'results', (
                     CASE WHEN COUNT(an.id) != 0 THEN
                       json_agg(
                           json_build_object(
                               'answer_id', an.id,
                               'body', an.body,
-                              'date', an.date_written,
+                              'date', to_timestamp(an.date_written),
                               'answerer_name', an.answerer_name,
                               'helpfulness', an.helpful,
                               'photos', ( SELECT
@@ -103,7 +107,7 @@ const getAllAs = function (question_id, page, count) {
               ) results
       FROM answers an
       WHERE an.question_id = $1::bigint AND an.reported = 0;
-      `, [question_id])
+      `, [question_id, page, count])
         .then((data) => {
           client.release();
           return data.rows[0].results;

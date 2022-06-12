@@ -9,8 +9,8 @@ app.use(express.json());
 app.get('/qa/questions', (req, res) => {
 
   let product_id = req.query.product_id;
-  let page = req.params.page || 1;
-  let count = req.params.count || 5;
+  let page = req.query.page || 1;
+  let count = req.query.count || 5;
 
   getAllQs(product_id, page, count)
     .then((questions) => {
@@ -24,8 +24,8 @@ app.get('/qa/questions', (req, res) => {
 
 app.get('/qa/questions/:question_id/answers', (req, res) => {
   let question_id = req.params.question_id;
-  let page = req.params.page || 1;
-  let count = req.params.count || 5;
+  let page = req.query.page || 1;
+  let count = req.query.count || 5;
 
   getAllAs(question_id, page, count)
     .then((answers) => {

@@ -55,8 +55,55 @@ FROM
   OFFSET $4::bigint
   LIMIT $3::bigint
 ) q;
-`
+`;
+
+const getAllAnswers = `
+SELECT
+json_build_object (
+    'question_id', $1::bigint,
+    'page', $2::bigint,
+    'count', $3::bigint,
+    'results', (
+              CASE WHEN COUNT(an.id) != 0 THEN
+                json_agg(
+                    json_build_object(
+                        'answer_id', an.id,
+                        'body', an.body,
+                        'date', to_timestamp(an.date_written),
+                        'answerer_name', an.answerer_name,
+                        'helpfulness', an.helpful,
+                        'photos', ( SELECT
+                                  CASE WHEN COUNT(ap.id) != 0 THEN
+                                  json_agg(
+                                      json_build_object(
+                                          'id', ap.id,
+                                          'url', ap.url
+                                      ))
+                                  ELSE '[]'::json END
+                                  FROM answers_photos ap
+                                  WHERE ap.answer_id = an.id
+
+                                  )
+                    )
+                ) ELSE '{}'::json END
+            )
+        ) results
+        FROM (
+          SELECT
+          ans.id,
+          ans.body,
+          ans.date_written,
+          ans.answerer_name,
+          ans.reported,
+          ans.helpful
+          FROM answers ans
+          WHERE ans.question_id = $1::bigint AND ans.reported = 0
+          OFFSET $4::bigint
+          LIMIT $3::bigint
+        ) an;
+`;
 
 module.exports = {
   getAllQuestions,
+  getAllAnswers,
 }

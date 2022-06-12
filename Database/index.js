@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const { getAllQuestions } = require('./queries.js');
+const { getAllQuestions, getAllAnswers } = require('./queries.js');
 
 const pool = new Pool({
   user: process.env.USER,
@@ -10,10 +10,10 @@ const pool = new Pool({
 });
 
 
-const getAllQs = function (product_id, page, count) {
+const getAllQs = function (product_id, page, count, offset) {
   return pool.connect()
     .then((client) => {
-      return client.query(getAllQuestions, [product_id, page, count, (page -1) * count])
+      return client.query(getAllQuestions, [ product_id, page, count, offset ])
         .then((data) => {
           client.release();
           return data.rows[0].results;
@@ -28,43 +28,10 @@ const getAllQs = function (product_id, page, count) {
     });
 }
 
-const getAllAs = function (question_id, page, count) {
+const getAllAs = function (question_id, page, count, offset) {
   return pool.connect()
     .then((client) => {
-      return client.query(`
-      SELECT
-      json_build_object (
-          'question_id', $1::bigint,
-          'page', $2::bigint,
-          'count', $3::bigint,
-          'results', (
-                    CASE WHEN COUNT(an.id) != 0 THEN
-                      json_agg(
-                          json_build_object(
-                              'answer_id', an.id,
-                              'body', an.body,
-                              'date', to_timestamp(an.date_written),
-                              'answerer_name', an.answerer_name,
-                              'helpfulness', an.helpful,
-                              'photos', ( SELECT
-                                        CASE WHEN COUNT(ap.id) != 0 THEN
-                                        json_agg(
-                                            json_build_object(
-                                                'id', ap.id,
-                                                'url', ap.url
-                                            ))
-                                        ELSE '[]'::json END
-                                        FROM answers_photos ap
-                                        WHERE ap.answer_id = an.id
-
-                                        )
-                          )
-                      ) ELSE '{}'::json END
-                  )
-              ) results
-      FROM answers an
-      WHERE an.question_id = $1::bigint AND an.reported = 0;
-      `, [question_id, page, count])
+      return client.query(getAllAnswers, [question_id, page, count, offset])
         .then((data) => {
           client.release();
           return data.rows[0].results;

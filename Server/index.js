@@ -11,8 +11,9 @@ app.get('/qa/questions', (req, res) => {
   let product_id = req.query.product_id;
   let page = req.query.page || 1;
   let count = req.query.count || 5;
+  let offset = (page -1) * count;
 
-  getAllQs(product_id, page, count)
+  getAllQs(product_id, page, count, offset)
     .then((questions) => {
       res.json(questions);
     })
@@ -26,8 +27,9 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
   let question_id = req.params.question_id;
   let page = req.query.page || 1;
   let count = req.query.count || 5;
+  let offset = (page -1) * count;
 
-  getAllAs(question_id, page, count)
+  getAllAs(question_id, page, count, offset)
     .then((answers) => {
       res.json(answers);
     })

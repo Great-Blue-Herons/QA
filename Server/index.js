@@ -1,76 +1,128 @@
 const express = require('express');
+const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ, voteHelpfulA, reportQ, reportA } = require('../Database/index.js');
 const app = express();
-require('dotenv').config();
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DB,
-  port: process.env.DB_PORT,
-});
 
 // middleware
 app.use(express.json());
 
 // routes
 app.get('/qa/questions', (req, res) => {
-  pool.connect()
-  .then((client) => {
-    client.query(`
-    SELECT
-    json_build_object (
-        'product_id', $1::bigint,
-        'results', json_agg(
-            json_build_object(
-                'question_id', q.id,
-                'question_body', q.body,
-                'date_written', q.date_written,
-                'asker_name', q.asker_name,
-                'question_helpfulness', q.helpful,
-                'reported', q.reported,
-                'answers', (SELECT
-                            CASE WHEN COUNT(an.id) != 0 THEN
-                    json_object_agg( an.id,
-                        json_build_object(
-                            'id', an.id,
-                            'body', an.body,
-                            'date', an.date_written,
-                            'answerer_name', an.answerer_name,
-                            'helpfulness', an.helpful,
-                            'photos', ( SELECT
-                                       CASE WHEN COUNT(ap.id) != 0 THEN
-                                       json_agg(
-                                           json_build_object(
-                                               'id', ap.id,
-                                               'url', ap.url
-                                           ))
-                                       ELSE '[]'::json END
-                                       FROM answers_photos ap
-                                       WHERE ap.answer_id = an.id
 
-                                      )
-                        )
-                    ) ELSE '{}'::json END
-                    FROM answers an
-                    WHERE an.question_id = q.id AND an.reported = 0
-                )
-            )
-        )
-    ) results
-    FROM questions q
-    WHERE q.product_id = $1::bigint AND q.reported = 0;`, [req.query.product_id])
-    .then(data => {
-      client.release();
-      res.json(data.rows[0].results);
+  let product_id = req.query.product_id;
+  let page = req.query.page || 1;
+  let count = req.query.count || 5;
+  let offset = (page -1) * count;
+
+  getAllQs(product_id, page, count, offset)
+    .then((questions) => {
+      res.json(questions);
     })
-  })
-  .catch(err => {console.log(err)
-   res.statusCode(500);
-  });
+    .catch(err => {
+      console.log('error fetching questions', err);
+      res.statusCode(500);
+    });
 });
 
+app.get('/qa/questions/:question_id/answers', (req, res) => {
+  let question_id = req.params.question_id;
+  let page = req.query.page || 1;
+  let count = req.query.count || 5;
+  let offset = (page -1) * count;
 
+  getAllAs(question_id, page, count, offset)
+    .then((answers) => {
+      res.json(answers);
+    })
+    .catch(err => {
+      console.log('error fetching answers', err);
+      res.statusCode(500);
+    });
+});
+
+app.post('/qa/questions', (req, res) => {
+  let body = req.body.body;
+  let name = req.body.name;
+  let email = req.body.email;
+  let product_id = req.body.product_id;
+
+  postQ(body, name, email, product_id)
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('error posting question to db', err);
+      res.sendStatus(500);
+    })
+});
+
+app.post('/qa/questions/:question_id/answers', (req, res) => {
+  let body = req.body.body;
+  let name = req.body.name;
+  let email = req.body.email;
+  let photos = req.body.photos;
+  let question_id = req.params.question_id;
+
+  postA(body, name, email, question_id, photos)
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('error posting answer to db', err);
+      res.sendStatus(500);
+    })
+});
+
+app.put('/qa/questions/:question_id/helpful', (req, res) => {
+  let question_id = req.params.question_id;
+
+  voteHelpfulQ(question_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error voting question helpful', err);
+      res.sendStatus(500);
+    })
+});
+
+app.put('/qa/questions/:question_id/report', (req, res) => {
+  let question_id = req.params.question_id;
+
+  reportQ(question_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error reporting question', err);
+      res.sendStatus(500);
+    })
+});
+
+app.put('/qa/answers/:answer_id/helpful', (req, res) => {
+  let answer_id = req.params.answer_id;
+
+  voteHelpfulA(answer_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error voting answer helpful', err);
+      res.sendStatus(500);
+    })
+});
+
+app.put('/qa/answers/:answer_id/report', (req, res) => {
+  let answer_id = req.params.answer_id;
+
+  reportA(answer_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error reporting answer', err);
+      res.sendStatus(500);
+    })
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);

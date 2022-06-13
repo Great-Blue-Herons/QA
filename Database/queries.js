@@ -108,6 +108,16 @@ INSERT INTO questions (body, asker_name, asker_email, product_id)
 VALUES ($1::text, $2::varchar, $3::varchar, $4::bigint)
 `;
 
+// const postAnswer = `
+// WITH current_answer AS (
+//   INSERT INTO answers (body, answerer_name, answerer_email, question_id)
+//   VALUES ($1::text, $2::varchar, $3::varchar, $4::bigint) RETURNING id
+// )
+// INSERT INTO answers_photos (answer_id, url)
+// SELECT id, UNNEST($5::text[])
+//  FROM current_answer;
+// `;
+
 const postAnswer = `
 WITH current_answer AS (
   INSERT INTO answers (body, answerer_name, answerer_email, question_id)
@@ -115,7 +125,9 @@ WITH current_answer AS (
 )
 INSERT INTO answers_photos (answer_id, url)
 SELECT id, UNNEST($5::text[])
- FROM current_answer;
+ FROM current_answer
+ WHERE array_length($5::text[], 1) > 0
+ ;
 `;
 
 const voteHelpfulQuestion = `

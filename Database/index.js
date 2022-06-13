@@ -20,12 +20,8 @@ const getAllQs = function (product_id, page, count, offset) {
         })
         .catch((err) => {
           client.release();
-          console.log('error getting all questions', err);
         });
     })
-    .catch((err) => {
-      console.log('trouble connecting to db', err);
-    });
 }
 
 const getAllAs = function (question_id, page, count, offset) {
@@ -38,12 +34,8 @@ const getAllAs = function (question_id, page, count, offset) {
         })
         .catch((err) => {
           client.release();
-          console.log('error getting all answers', err);
         });
     })
-    .catch((err) => {
-      console.log('trouble connecting to db', err);
-    });
 }
 
 const postQ = function (body, name, email, product_id) {
@@ -55,12 +47,8 @@ const postQ = function (body, name, email, product_id) {
         })
         .catch((err) => {
           client.release();
-          console.log('error posting question', err);
         });
     })
-    .catch((err) => {
-      console.log('trouble connecting to db', err);
-    });
 }
 
 const postA = function (body, name, email, question_id, photos) {
@@ -72,12 +60,8 @@ const postA = function (body, name, email, question_id, photos) {
       })
       .catch((err) => {
         client.release();
-        console.log('error posting answer', err);
       });
   })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
 }
 
 const voteHelpfulQ = function (question_id) {
@@ -89,12 +73,8 @@ const voteHelpfulQ = function (question_id) {
       })
       .catch((err) => {
         client.release();
-        console.log('error getting all questions', err);
       });
   })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
 }
 
 const reportQ = function (question_id) {
@@ -106,12 +86,8 @@ const reportQ = function (question_id) {
       })
       .catch((err) => {
         client.release();
-        console.log('error reporting question', err);
       });
   })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
 }
 
 const voteHelpfulA = function (answer_id) {
@@ -123,12 +99,8 @@ const voteHelpfulA = function (answer_id) {
       })
       .catch((err) => {
         client.release();
-        console.log('error voting answer helpful', err);
       });
   })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
 }
 
 const reportA = function (answer_id) {
@@ -140,12 +112,8 @@ const reportA = function (answer_id) {
       })
       .catch((err) => {
         client.release();
-        console.log('error reporting answer', err);
       });
   })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
 }
 
 

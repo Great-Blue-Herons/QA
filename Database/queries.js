@@ -118,9 +118,17 @@ SELECT id, UNNEST($5::text[])
  FROM current_answer;
 `;
 
+const voteHelpfulQuestion = `
+UPDATE questions
+SET helpful = helpful + 1
+WHERE id = $1::bigint;
+`;
+
+
 module.exports = {
   getAllQuestions,
   getAllAnswers,
   postQuestion,
   postAnswer,
+  voteHelpfulQuestion,
 }

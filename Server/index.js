@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ } = require('../Database/index.js');
+const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ, voteHelpfulA } = require('../Database/index.js');
 const app = express();
 
 // middleware
@@ -81,6 +81,19 @@ app.put('/qa/questions/:question_id/helpful', (req, res) => {
     })
     .catch((err) => {
       console.log('error voting question helpful', err);
+      res.sendStatus(500);
+    })
+});
+
+app.put('/qa/answers/:answer_id/helpful', (req, res) => {
+  let answer_id = req.params.answer_id;
+
+  voteHelpfulA(answer_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error voting answer helpful', err);
       res.sendStatus(500);
     })
 });

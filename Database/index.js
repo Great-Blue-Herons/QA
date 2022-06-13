@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const { getAllQuestions, getAllAnswers, postQuestion, postAnswer, voteHelpfulQuestion } = require('./queries.js');
+const { getAllQuestions, getAllAnswers, postQuestion, postAnswer, voteHelpfulQuestion, voteHelpfulAnswer } = require('./queries.js');
 
 const pool = new Pool({
   user: process.env.USER,
@@ -119,15 +119,13 @@ const reportQ = function (question_id) {
 const voteHelpfulA = function (answer_id) {
   return pool.connect()
   .then((client) => {
-    return client.query(`
-    `, [product_id])
+    return client.query(voteHelpfulAnswer, [answer_id])
       .then((data) => {
         client.release();
-        return data.rows[0].results;
       })
       .catch((err) => {
         client.release();
-        console.log('error getting all questions', err);
+        console.log('error voting answer helpful', err);
       });
   })
   .catch((err) => {

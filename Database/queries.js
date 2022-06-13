@@ -125,10 +125,19 @@ WHERE id = $1::bigint;
 `;
 
 
+
+const voteHelpfulAnswer = `
+UPDATE answers
+SET helpful = helpful + 1
+WHERE id = $1::bigint;
+`;
+
+
 module.exports = {
   getAllQuestions,
   getAllAnswers,
   postQuestion,
   postAnswer,
   voteHelpfulQuestion,
+  voteHelpfulAnswer
 }

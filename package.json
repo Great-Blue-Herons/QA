@@ -19,7 +19,8 @@
   "homepage": "https://github.com/Great-Blue-Herons/QA#readme",
   "devDependencies": {
     "eslint": "^8.17.0",
-    "jest": "^28.1.1"
+    "jest": "^28.1.1",
+    "supertest": "^6.2.3"
   },
   "dependencies": {
     "dotenv": "^16.0.1",

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const { getAllQuestions, getAllAnswers, postQuestion, postAnswer, voteHelpfulQuestion, voteHelpfulAnswer } = require('./queries.js');
+const { getAllQuestions, getAllAnswers, postQuestion, postAnswer, voteHelpfulQuestion, voteHelpfulAnswer, reportQuestion, reportAnswer } = require('./queries.js');
 
 const pool = new Pool({
   user: process.env.USER,
@@ -100,15 +100,13 @@ const voteHelpfulQ = function (question_id) {
 const reportQ = function (question_id) {
   return pool.connect()
   .then((client) => {
-    return client.query(`
-    `, [product_id])
+    return client.query(reportQuestion, [question_id])
       .then((data) => {
         client.release();
-        return data.rows[0].results;
       })
       .catch((err) => {
         client.release();
-        console.log('error getting all questions', err);
+        console.log('error reporting question', err);
       });
   })
   .catch((err) => {
@@ -136,15 +134,13 @@ const voteHelpfulA = function (answer_id) {
 const reportA = function (answer_id) {
   return pool.connect()
   .then((client) => {
-    return client.query(`
-    `, [product_id])
+    return client.query(reportAnswer, [answer_id])
       .then((data) => {
         client.release();
-        return data.rows[0].results;
       })
       .catch((err) => {
         client.release();
-        console.log('error getting all questions', err);
+        console.log('error reporting answer', err);
       });
   })
   .catch((err) => {

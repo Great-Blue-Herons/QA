@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ, voteHelpfulA } = require('../Database/index.js');
+const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ, voteHelpfulA, reportQ, reportA } = require('../Database/index.js');
 const app = express();
 
 // middleware
@@ -85,6 +85,19 @@ app.put('/qa/questions/:question_id/helpful', (req, res) => {
     })
 });
 
+app.put('/qa/questions/:question_id/report', (req, res) => {
+  let question_id = req.params.question_id;
+
+  reportQ(question_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error reporting question', err);
+      res.sendStatus(500);
+    })
+});
+
 app.put('/qa/answers/:answer_id/helpful', (req, res) => {
   let answer_id = req.params.answer_id;
 
@@ -94,6 +107,19 @@ app.put('/qa/answers/:answer_id/helpful', (req, res) => {
     })
     .catch((err) => {
       console.log('error voting answer helpful', err);
+      res.sendStatus(500);
+    })
+});
+
+app.put('/qa/answers/:answer_id/report', (req, res) => {
+  let answer_id = req.params.answer_id;
+
+  reportA(answer_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch((err) => {
+      console.log('error reporting answer', err);
       res.sendStatus(500);
     })
 });

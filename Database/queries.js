@@ -124,11 +124,21 @@ SET helpful = helpful + 1
 WHERE id = $1::bigint;
 `;
 
-
+const reportQuestion = `
+UPDATE questions
+SET reported = reported + 1
+WHERE id = $1::bigint;
+`;
 
 const voteHelpfulAnswer = `
 UPDATE answers
 SET helpful = helpful + 1
+WHERE id = $1::bigint;
+`;
+
+const reportAnswer = `
+UPDATE answers
+SET reported = reported + 1
 WHERE id = $1::bigint;
 `;
 
@@ -139,5 +149,7 @@ module.exports = {
   postQuestion,
   postAnswer,
   voteHelpfulQuestion,
-  voteHelpfulAnswer
+  reportQuestion,
+  voteHelpfulAnswer,
+  reportAnswer
 }

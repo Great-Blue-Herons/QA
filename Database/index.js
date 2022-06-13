@@ -7,35 +7,36 @@ const pool = new Pool({
   host: process.env.HOST,
   database: process.env.DB,
   port: process.env.DB_PORT,
+  max: 80,
 });
 
 
 const getAllQs = function (product_id, page, count, offset) {
-  return pool.connect()
-    .then((client) => {
-      return client.query(getAllQuestions, [ product_id, page, count, offset ])
+  // return pool.connect()
+  //   .then((client) => {
+      return pool.query(getAllQuestions, [ product_id, page, count, offset ])
         .then((data) => {
-          client.release();
+          // pool.release();
           return data.rows[0].results;
         })
         .catch((err) => {
-          client.release();
+          // pool.release();
         });
-    })
+    // })
 }
 
 const getAllAs = function (question_id, page, count, offset) {
-  return pool.connect()
-    .then((client) => {
-      return client.query(getAllAnswers, [question_id, page, count, offset])
+  // return pool.connect()
+  //   .then((client) => {
+      return pool.query(getAllAnswers, [question_id, page, count, offset])
         .then((data) => {
-          client.release();
+          // client.release();
           return data.rows[0].results;
-        })
-        .catch((err) => {
-          client.release();
         });
-    })
+        // .catch((err) => {
+        //   // client.release();
+        // });
+//     })
 }
 
 const postQ = function (body, name, email, product_id) {

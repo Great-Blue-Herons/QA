@@ -12,109 +12,41 @@ const pool = new Pool({
 
 
 const getAllQs = function (product_id, page, count, offset) {
-  // return pool.connect()
-  //   .then((client) => {
-      return pool.query(getAllQuestions, [ product_id, page, count, offset ])
-        .then((data) => {
-          // pool.release();
-          return data.rows[0].results;
-        })
-        .catch((err) => {
-          // pool.release();
-        });
-    // })
+  return pool.query(getAllQuestions, [ product_id, page, count, offset ])
+    .then((data) => {
+      return data.rows[0].results;
+    });
 }
 
 const getAllAs = function (question_id, page, count, offset) {
-  // return pool.connect()
-  //   .then((client) => {
-      return pool.query(getAllAnswers, [question_id, page, count, offset])
-        .then((data) => {
-          // client.release();
-          return data.rows[0].results;
-        });
-        // .catch((err) => {
-        //   // client.release();
-        // });
-//     })
+  return pool.query(getAllAnswers, [question_id, page, count, offset])
+    .then((data) => {
+      return data.rows[0].results;
+    });
 }
 
 const postQ = function (body, name, email, product_id) {
-  return pool.connect()
-    .then((client) => {
-      return client.query(postQuestion, [body, name, email, product_id])
-        .then(() => {
-          client.release();
-        })
-        .catch((err) => {
-          client.release();
-        });
-    })
+  return pool.query(postQuestion, [body, name, email, product_id]);
 }
 
 const postA = function (body, name, email, question_id, photos) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(postAnswer, [body, name, email, question_id, photos])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-      });
-  })
+  return pool.query(postAnswer, [body, name, email, question_id, photos]);
 }
 
 const voteHelpfulQ = function (question_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(voteHelpfulQuestion, [question_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-      });
-  })
+  return pool.query(voteHelpfulQuestion, [question_id]);
 }
 
 const reportQ = function (question_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(reportQuestion, [question_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-      });
-  })
+  return pool.query(reportQuestion, [question_id]);
 }
 
 const voteHelpfulA = function (answer_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(voteHelpfulAnswer, [answer_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-      });
-  })
+  return pool.query(voteHelpfulAnswer, [answer_id])
 }
 
 const reportA = function (answer_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(reportAnswer, [answer_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-      });
-  })
+  return pool.query(reportAnswer, [answer_id]);
 }
 
 

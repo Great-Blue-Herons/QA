@@ -1,5 +1,15 @@
-CREATE DATABASE IF NOT EXISTS qa;
-\c qa;
+-- Database: qa
+
+-- DROP DATABASE IF EXISTS qa;
+
+CREATE DATABASE qa
+    WITH
+    OWNER = soniaannfriscia
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'C'
+    LC_CTYPE = 'C'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
 
 -- Table: public.questions
 

@@ -3,10 +3,11 @@ const { Pool } = require('pg');
 const { getAllQuestions, getAllAnswers, postQuestion, postAnswer, voteHelpfulQuestion, voteHelpfulAnswer, reportQuestion, reportAnswer } = require('./queries.js');
 
 const pool = new Pool({
-  user: process.env.USER,
+  user: process.env.DB_USER,
   host: process.env.HOST,
   database: process.env.DB,
   port: process.env.DB_PORT,
+  password: process.env.DB_PASS
 });
 
 

@@ -11,141 +11,41 @@ const pool = new Pool({
 
 
 const getAllQs = function (product_id, page, count, offset) {
-  return pool.connect()
-    .then((client) => {
-      return client.query(getAllQuestions, [ product_id, page, count, offset ])
-        .then((data) => {
-          client.release();
-          return data.rows[0].results;
-        })
-        .catch((err) => {
-          client.release();
-          console.log('error getting all questions', err);
-        });
-    })
-    .catch((err) => {
-      console.log('trouble connecting to db', err);
+  return pool.query(getAllQuestions, [ product_id, page, count, offset ])
+    .then((data) => {
+      return data.rows[0].results;
     });
 }
 
 const getAllAs = function (question_id, page, count, offset) {
-  return pool.connect()
-    .then((client) => {
-      return client.query(getAllAnswers, [question_id, page, count, offset])
-        .then((data) => {
-          client.release();
-          return data.rows[0].results;
-        })
-        .catch((err) => {
-          client.release();
-          console.log('error getting all answers', err);
-        });
-    })
-    .catch((err) => {
-      console.log('trouble connecting to db', err);
+  return pool.query(getAllAnswers, [question_id, page, count, offset])
+    .then((data) => {
+      return data.rows[0].results;
     });
 }
 
 const postQ = function (body, name, email, product_id) {
-  return pool.connect()
-    .then((client) => {
-      return client.query(postQuestion, [body, name, email, product_id])
-        .then(() => {
-          client.release();
-        })
-        .catch((err) => {
-          client.release();
-          console.log('error posting question', err);
-        });
-    })
-    .catch((err) => {
-      console.log('trouble connecting to db', err);
-    });
+  return pool.query(postQuestion, [body, name, email, product_id]);
 }
 
 const postA = function (body, name, email, question_id, photos) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(postAnswer, [body, name, email, question_id, photos])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-        console.log('error posting answer', err);
-      });
-  })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
+  return pool.query(postAnswer, [body, name, email, question_id, photos]);
 }
 
 const voteHelpfulQ = function (question_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(voteHelpfulQuestion, [question_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-        console.log('error getting all questions', err);
-      });
-  })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
+  return pool.query(voteHelpfulQuestion, [question_id]);
 }
 
 const reportQ = function (question_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(reportQuestion, [question_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-        console.log('error reporting question', err);
-      });
-  })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
+  return pool.query(reportQuestion, [question_id]);
 }
 
 const voteHelpfulA = function (answer_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(voteHelpfulAnswer, [answer_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-        console.log('error voting answer helpful', err);
-      });
-  })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
+  return pool.query(voteHelpfulAnswer, [answer_id])
 }
 
 const reportA = function (answer_id) {
-  return pool.connect()
-  .then((client) => {
-    return client.query(reportAnswer, [answer_id])
-      .then((data) => {
-        client.release();
-      })
-      .catch((err) => {
-        client.release();
-        console.log('error reporting answer', err);
-      });
-  })
-  .catch((err) => {
-    console.log('trouble connecting to db', err);
-  });
+  return pool.query(reportAnswer, [answer_id]);
 }
 
 

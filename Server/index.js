@@ -5,7 +5,7 @@ const path = require('path');
 
 // middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "..", "/Server/loaderio-7583159a3b2d15111dd55760dc516346.txt")));
+app.use(express.static(path.join(__dirname, "..", "/loaderio-7583159a3b2d15111dd55760dc516346.txt")));
 
 // routes
 app.get('/qa/questions', (req, res) => {

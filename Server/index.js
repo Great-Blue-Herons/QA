@@ -20,7 +20,7 @@ app.get('/qa/questions', (req, res) => {
     })
     .catch(err => {
       console.log('error fetching questions', err);
-      res.statusCode(500);
+      res.sendStatus(500);
     });
 });
 
@@ -36,7 +36,7 @@ app.get('/qa/questions/:question_id/answers', (req, res) => {
     })
     .catch(err => {
       console.log('error fetching answers', err);
-      res.statusCode(500);
+      res.sendStatus(500);
     });
 });
 

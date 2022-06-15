@@ -5,7 +5,6 @@ const path = require('path');
 
 // middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "..", "/loaderio-7583159a3b2d15111dd55760dc516346.txt")));
 
 // routes
 app.get('/qa/questions', (req, res) => {
@@ -128,6 +127,10 @@ app.put('/qa/answers/:answer_id/report', (req, res) => {
 
 app.get('/', (req, res) => {
   res.sendStatus(200);
+});
+
+app.get('/loaderio-7583159a3b2d15111dd55760dc516346', (req, res) => {
+  res.send("loaderio-7583159a3b2d15111dd55760dc516346");
 });
 
 app.listen(process.env.PORT, () => {

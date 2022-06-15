@@ -1,9 +1,11 @@
 const express = require('express');
 const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ, voteHelpfulA, reportQ, reportA } = require('../Database/index.js');
 const app = express();
+const path = require('path');
 
 // middleware
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "..", "/Server/loaderio-7583159a3b2d15111dd55760dc516346")));
 
 // routes
 app.get('/qa/questions', (req, res) => {

@@ -4,7 +4,7 @@ const { getAllQuestions, getAllAnswers, postQuestion, postAnswer, voteHelpfulQue
 
 const pool = new Pool({
   user: process.env.DB_USER,
-  host: process.env.HOST,
+  host: process.env.DB_HOST,
   database: process.env.DB,
   port: process.env.DB_PORT,
   password: process.env.DB_PASS,

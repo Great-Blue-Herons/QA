@@ -124,6 +124,10 @@ app.put('/qa/answers/:answer_id/report', (req, res) => {
     })
 });
 
+app.get('/', (req, res) => {
+  res.sendStatus(200);
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);
 });

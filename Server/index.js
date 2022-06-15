@@ -1,7 +1,6 @@
 const express = require('express');
 const { getAllQs, getAllAs, postQ, postA, voteHelpfulQ, voteHelpfulA, reportQ, reportA } = require('../Database/index.js');
 const app = express();
-const path = require('path');
 
 // middleware
 app.use(express.json());
@@ -129,8 +128,8 @@ app.get('/', (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/loaderio-7583159a3b2d15111dd55760dc516346', (req, res) => {
-  res.send("loaderio-7583159a3b2d15111dd55760dc516346");
+app.get(`/${process.env.LOADER}`, (req, res) => {
+  res.send(process.env.LOADER);
 });
 
 app.listen(process.env.PORT, () => {

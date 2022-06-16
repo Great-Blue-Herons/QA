@@ -8,7 +8,7 @@ const pool = new Pool({
   database: process.env.DB,
   port: process.env.DB_PORT,
   password: process.env.DB_PASS,
-  max: 50
+  max: 25
 });
 
 

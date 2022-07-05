@@ -16,7 +16,7 @@ QA suports the following queries:
 
 ## Installation and Development
 
-### Pre Instillation Requirments
+### Pre Installation Requirements
 ```
 node v16.15.0
 npm v8.5.5
